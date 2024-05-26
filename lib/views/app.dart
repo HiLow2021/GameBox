@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:game_box/models/othello_board.dart';
 import 'package:game_box/views/components/paint_canvas.dart';
 
 class MyApp extends StatelessWidget {
@@ -28,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Offset?> points = [];
+  OthelloBoard board = OthelloBoard(8);
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Padding(
           padding: const EdgeInsets.all(40.0),
           child: GestureDetector(
-              onPanUpdate: (DragUpdateDetails details) {
-                setState(() => points.add(details.localPosition));
-              },
-              onPanEnd: (DragEndDetails details) {
-                points.add(null);
-              },
+              onPanStart: (details) {},
               child: AspectRatio(
                 aspectRatio: 1,
                 child: CustomPaint(
-                  painter: PaintCanvas(points: points),
+                  painter: PaintCanvas(board: board),
                 ),
               )),
         ),

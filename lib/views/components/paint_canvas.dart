@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:game_box/models/othello_board.dart';
+import 'package:game_box/models/othello_board_cell.dart';
+import 'package:game_box/models/vector.dart';
+
 class PaintCanvas extends CustomPainter {
-  final cellSize = const Offset(8, 8);
   final strokeWidthThreshold = 640;
 
-  final List<Offset?> points;
+  final OthelloBoard board;
 
-  PaintCanvas({required this.points});
+  PaintCanvas({required this.board});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -15,6 +18,7 @@ class PaintCanvas extends CustomPainter {
 
     _clipRect(canvas, size);
     _drawBoard(canvas, size, strokeWidth);
+    _drawStone(canvas, size, strokeWidth);
   }
 
   @override
@@ -43,13 +47,33 @@ class PaintCanvas extends CustomPainter {
             size.width - strokeWidth, size.height - strokeWidth),
         paint);
 
-    for (var i = 1; i < cellSize.dx; i++) {
-      canvas.drawLine(Offset(0, i * (size.height / 8)),
-          Offset(size.width, i * (size.height / 8)), paint);
+    for (var i = 1; i < board.size; i++) {
+      canvas.drawLine(Offset(0, i * (size.height / board.size)),
+          Offset(size.width, i * (size.height / board.size)), paint);
+      canvas.drawLine(Offset(i * (size.width / board.size), 0),
+          Offset(i * (size.width / board.size), size.height), paint);
     }
-    for (var i = 1; i < cellSize.dy; i++) {
-      canvas.drawLine(Offset(i * (size.width / 8), 0),
-          Offset(i * (size.width / 8), size.height), paint);
+  }
+
+  void _drawStone(Canvas canvas, Size size, double strokeWidth) {
+    final paintBlack = Paint()..color = Colors.black;
+    final paintWhite = Paint()..color = Colors.white;
+    final cellSize = size.width / board.size;
+    final halfCellSize = cellSize / 2;
+    final stoneSize = cellSize / 3;
+
+    for (var y = 0; y < board.size; y++) {
+      for (var x = 0; x < board.size; x++) {
+        final cell = board.get(Vector(x, y));
+        if (cell == OthelloBoardCell.black || cell == OthelloBoardCell.white) {
+          final paint =
+              cell == OthelloBoardCell.black ? paintBlack : paintWhite;
+          canvas.drawCircle(
+              Offset(x * cellSize + halfCellSize, y * cellSize + halfCellSize),
+              stoneSize,
+              paint);
+        }
+      }
     }
   }
 }
