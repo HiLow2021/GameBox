@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:game_box/models/othello_board.dart';
+import 'package:game_box/models/othello_manager.dart';
 import 'package:game_box/views/components/othello_painter.dart';
 
 class MyApp extends StatelessWidget {
@@ -29,7 +29,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  OthelloBoard board = OthelloBoard(8);
+  final key = GlobalKey();
+  final manager = OthelloManager(8);
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +43,34 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Padding(
           padding: const EdgeInsets.all(40.0),
           child: GestureDetector(
-              onPanStart: (details) {},
+              onPanStart: (DragStartDetails details) {
+                setState(() {
+                  final size = getWidgetSize(key);
+                  if (size != null) {
+                    final cellSizeX = size.width / manager.board.size;
+                    final cellSizeY = size.height / manager.board.size;
+                    final x = (details.localPosition.dx / cellSizeX).toInt();
+                    final y = (details.localPosition.dy / cellSizeY).toInt();
+
+                    manager.next(x, y);
+                  }
+                });
+              },
               child: AspectRatio(
                 aspectRatio: 1,
                 child: CustomPaint(
-                  painter: OthelloPainter(board: board),
+                  key: key,
+                  painter: OthelloPainter(board: manager.board),
                 ),
               )),
         ),
       ),
     );
   }
+}
+
+Size? getWidgetSize(GlobalKey key) {
+  final size = key.currentContext?.size;
+
+  return size;
 }
