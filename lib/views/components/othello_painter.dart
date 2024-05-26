@@ -7,7 +7,9 @@ class OthelloPainter extends CustomPainter {
 
   final OthelloBoard board;
 
-  OthelloPainter({required this.board});
+  bool useHighLight;
+
+  OthelloPainter({required this.board, this.useHighLight = true});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -89,7 +91,7 @@ class OthelloPainter extends CustomPainter {
 
     for (var y = 0; y < board.size; y++) {
       for (var x = 0; x < board.size; x++) {
-        if (board.get(x, y) == OthelloBoardCell.highLight) {
+        if (useHighLight && board.get(x, y) == OthelloBoardCell.highLight) {
           canvas.drawRect(
               Rect.fromLTWH(
                   cellSize * x + strokeWidth + strokeWidthHalf,

@@ -6,10 +6,9 @@ import 'package:game_box/models/othello_board.dart';
 import 'package:game_box/models/vector.dart';
 
 abstract class OthelloManagerBase {
-  @protected
-  Turn currentTurn = Turn.black;
-
   Result _result = Result.undecided;
+
+  Turn currentTurn = Turn.black;
 
   late OthelloBoard board;
 
@@ -23,6 +22,7 @@ abstract class OthelloManagerBase {
 
   OthelloManagerBase(int size) {
     board = OthelloBoard(size);
+    initialize();
   }
 
   void initialize() {

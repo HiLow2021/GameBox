@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:game_box/models/enums/player.dart';
+import 'package:game_box/models/enums/turn.dart';
 import 'package:game_box/models/othello_manager.dart';
 import 'package:game_box/views/components/othello_painter.dart';
 
@@ -29,8 +31,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final key = GlobalKey();
-  final manager = OthelloManager(8);
+  final _key = GlobalKey();
+  final _manager = OthelloManager(8);
+
+  final _player = Player.black;
+  var _useHighLight = true;
+  var _canTap = true;
+
+  bool isOpponent(Turn currentTurn) =>
+      (currentTurn == Turn.white && _player == Player.black) ||
+      (currentTurn == Turn.black && _player == Player.white);
+
+  Size? getWidgetSize(GlobalKey key) {
+    final size = key.currentContext?.size;
+
+    return size;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,33 +59,51 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Padding(
           padding: const EdgeInsets.all(40.0),
           child: GestureDetector(
-              onPanStart: (DragStartDetails details) {
+              onPanStart: (DragStartDetails details) async {
+                if (!_canTap) {
+                  return;
+                }
+
+                _canTap = false;
+
+                var isSucceeded = false;
+
                 setState(() {
-                  final size = getWidgetSize(key);
+                  final size = getWidgetSize(_key);
                   if (size != null) {
-                    final cellSize = size.width / manager.board.size;
+                    final cellSize = size.width / _manager.board.size;
                     final x = (details.localPosition.dx / cellSize).toInt();
                     final y = (details.localPosition.dy / cellSize).toInt();
 
-                    manager.next(x, y);
+                    isSucceeded = _manager.next(x, y);
                   }
                 });
+
+                if (isSucceeded) {
+                  _useHighLight = false;
+
+                  while (!_manager.isFinished &&
+                      isOpponent(_manager.currentTurn)) {
+                    await Future.delayed(const Duration(milliseconds: 500));
+
+                    setState(() => _manager.nextByAI());
+                  }
+
+                  _useHighLight = true;
+                }
+
+                _canTap = true;
               },
               child: AspectRatio(
                 aspectRatio: 1,
                 child: CustomPaint(
-                  key: key,
-                  painter: OthelloPainter(board: manager.board),
+                  key: _key,
+                  painter: OthelloPainter(
+                      board: _manager.board, useHighLight: _useHighLight),
                 ),
               )),
         ),
       ),
     );
   }
-}
-
-Size? getWidgetSize(GlobalKey key) {
-  final size = key.currentContext?.size;
-
-  return size;
 }

@@ -1,0 +1,1 @@
+enum Player { black, white }

@@ -1,4 +1,5 @@
 import 'package:game_box/models/enums/othello_board_cell.dart';
+import 'package:game_box/models/othello_ai_manager.dart';
 import 'package:game_box/models/othello_manager_base.dart';
 
 class OthelloManager extends OthelloManagerBase {
@@ -19,6 +20,20 @@ class OthelloManager extends OthelloManagerBase {
     }
 
     return false;
+  }
+
+  bool nextByAI() {
+    if (isFinished) {
+      return false;
+    }
+
+    final aiManager = OthelloAIManager(board.size)
+      ..initialize()
+      ..setBoard(board.cells, currentTurn);
+
+    final position = aiManager.randomMethod();
+
+    return next(position.x, position.y);
   }
 
   void _setHighLight(OthelloBoardCell chip) {
