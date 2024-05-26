@@ -14,9 +14,10 @@ class OthelloPainter extends CustomPainter {
     final th = _strokeWidthThreshold;
     final strokeWidth = size.width < th || size.height < th ? 2.0 : 4.0;
 
-    _clipRect(canvas, size);
+    _clipRect(canvas, size, strokeWidth);
     _drawBoard(canvas, size, strokeWidth);
     _drawStone(canvas, size, strokeWidth);
+    _drawHighLight(canvas, size, strokeWidth);
   }
 
   @override
@@ -24,8 +25,9 @@ class OthelloPainter extends CustomPainter {
     return true;
   }
 
-  void _clipRect(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+  void _clipRect(Canvas canvas, Size size, double strokeWidth) {
+    final rect = Rect.fromLTWH(
+        0, 0, size.width + strokeWidth, size.height + strokeWidth);
 
     canvas.clipRect(rect);
   }
@@ -33,7 +35,7 @@ class OthelloPainter extends CustomPainter {
   void _drawBoard(Canvas canvas, Size size, double strokeWidth) {
     canvas.drawColor(const Color.fromARGB(255, 37, 183, 42), BlendMode.src);
 
-    final halfStrokeWidth = strokeWidth / 2;
+    final strokeWidthHalf = strokeWidth / 2;
     final paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
@@ -41,15 +43,15 @@ class OthelloPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     canvas.drawRect(
-        Rect.fromLTWH(halfStrokeWidth, halfStrokeWidth,
-            size.width - strokeWidth, size.height - strokeWidth),
+        Rect.fromLTWH(
+            strokeWidthHalf, strokeWidthHalf, size.width, size.height),
         paint);
 
     for (var i = 1; i < board.size; i++) {
-      canvas.drawLine(Offset(0, i * (size.height / board.size)),
-          Offset(size.width, i * (size.height / board.size)), paint);
-      canvas.drawLine(Offset(i * (size.width / board.size), 0),
-          Offset(i * (size.width / board.size), size.height), paint);
+      canvas.drawLine(Offset(0, i * (size.height / board.size) + strokeWidthHalf),
+          Offset(size.width, i * (size.height / board.size) + strokeWidthHalf), paint);
+      canvas.drawLine(Offset(i * (size.width / board.size) + strokeWidthHalf, 0),
+          Offset(i * (size.width / board.size) + strokeWidthHalf, size.height), paint);
     }
   }
 
@@ -69,6 +71,28 @@ class OthelloPainter extends CustomPainter {
           canvas.drawCircle(
               Offset(x * cellSize + halfCellSize, y * cellSize + halfCellSize),
               stoneSize,
+              paint);
+        }
+      }
+    }
+  }
+
+  void _drawHighLight(Canvas canvas, Size size, double strokeWidth) {
+    final paint = Paint()
+      ..color = Colors.orange
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+    final strokeWidthHalf = strokeWidth / 2;
+
+    for (var y = 0; y < board.size; y++) {
+      for (var x = 0; x < board.size; x++) {
+        if (board.get(x, y) == OthelloBoardCell.highLight) {
+          canvas.drawRect(
+              Rect.fromLTWH(
+                  (size.width / board.size) * x + strokeWidth + strokeWidthHalf,
+                  (size.height / board.size) * y + strokeWidth + strokeWidthHalf,
+                  (size.width / board.size) - strokeWidth * 2,
+                  (size.height / board.size) - strokeWidth * 2),
               paint);
         }
       }
