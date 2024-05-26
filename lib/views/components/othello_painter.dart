@@ -13,11 +13,12 @@ class OthelloPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final th = _strokeWidthThreshold;
     final strokeWidth = size.width < th || size.height < th ? 2.0 : 4.0;
+    final s = Size(size.width - strokeWidth, size.height - strokeWidth);
 
-    _clipRect(canvas, size, strokeWidth);
-    _drawBoard(canvas, size, strokeWidth);
-    _drawStone(canvas, size, strokeWidth);
-    _drawHighLight(canvas, size, strokeWidth);
+    _clipRect(canvas, s, strokeWidth);
+    _drawBoard(canvas, s, strokeWidth);
+    _drawStone(canvas, s, strokeWidth);
+    _drawHighLight(canvas, s, strokeWidth);
   }
 
   @override
