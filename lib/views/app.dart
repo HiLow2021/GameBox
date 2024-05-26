@@ -47,10 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {
                   final size = getWidgetSize(key);
                   if (size != null) {
-                    final cellSizeX = size.width / manager.board.size;
-                    final cellSizeY = size.height / manager.board.size;
-                    final x = (details.localPosition.dx / cellSizeX).toInt();
-                    final y = (details.localPosition.dy / cellSizeY).toInt();
+                    final cellSize = size.width / manager.board.size;
+                    final x = (details.localPosition.dx / cellSize).toInt();
+                    final y = (details.localPosition.dy / cellSize).toInt();
 
                     manager.next(x, y);
                   }
