@@ -1,0 +1,1 @@
+enum Turn { black, white }

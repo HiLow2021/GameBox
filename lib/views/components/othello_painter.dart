@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:game_box/models/enums/othello_board_cell.dart';
 import 'package:game_box/models/othello_board.dart';
-import 'package:game_box/models/othello_board_cell.dart';
-import 'package:game_box/models/vector.dart';
 
 class OthelloPainter extends CustomPainter {
   final _strokeWidthThreshold = 640;
@@ -64,7 +62,7 @@ class OthelloPainter extends CustomPainter {
 
     for (var y = 0; y < board.size; y++) {
       for (var x = 0; x < board.size; x++) {
-        final cell = board.get(Vector(x, y));
+        final cell = board.get(x, y);
         if (cell == OthelloBoardCell.black || cell == OthelloBoardCell.white) {
           final paint =
               cell == OthelloBoardCell.black ? paintBlack : paintWhite;
