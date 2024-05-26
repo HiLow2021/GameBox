@@ -58,7 +58,7 @@ class OthelloPainter extends CustomPainter {
 
   void _drawStone(Canvas canvas, Size size, double strokeWidth) {
     final cellSize = size.width / board.size;
-    final halfCellSize = cellSize / 2;
+    final cellSizeHalf = cellSize / 2;
     final stoneSize = cellSize / 3;
     final paintBlack = Paint()..color = Colors.black;
     final paintWhite = Paint()..color = Colors.white;
@@ -70,7 +70,7 @@ class OthelloPainter extends CustomPainter {
           final paint =
               cell == OthelloBoardCell.black ? paintBlack : paintWhite;
           canvas.drawCircle(
-              Offset(x * cellSize + halfCellSize, y * cellSize + halfCellSize),
+              Offset(x * cellSize + cellSizeHalf, y * cellSize + cellSizeHalf),
               stoneSize,
               paint);
         }
