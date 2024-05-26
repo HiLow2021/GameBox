@@ -35,6 +35,7 @@ class OthelloPainter extends CustomPainter {
   void _drawBoard(Canvas canvas, Size size, double strokeWidth) {
     canvas.drawColor(const Color.fromARGB(255, 37, 183, 42), BlendMode.src);
 
+    final cellSize = size.width / board.size;
     final strokeWidthHalf = strokeWidth / 2;
     final paint = Paint()
       ..color = Colors.black
@@ -48,19 +49,19 @@ class OthelloPainter extends CustomPainter {
         paint);
 
     for (var i = 1; i < board.size; i++) {
-      canvas.drawLine(Offset(0, i * (size.height / board.size) + strokeWidthHalf),
-          Offset(size.width, i * (size.height / board.size) + strokeWidthHalf), paint);
-      canvas.drawLine(Offset(i * (size.width / board.size) + strokeWidthHalf, 0),
-          Offset(i * (size.width / board.size) + strokeWidthHalf, size.height), paint);
+      canvas.drawLine(Offset(0, i * cellSize + strokeWidthHalf),
+          Offset(size.width, i * cellSize + strokeWidthHalf), paint);
+      canvas.drawLine(Offset(i * cellSize + strokeWidthHalf, 0),
+          Offset(i * cellSize + strokeWidthHalf, size.height), paint);
     }
   }
 
   void _drawStone(Canvas canvas, Size size, double strokeWidth) {
-    final paintBlack = Paint()..color = Colors.black;
-    final paintWhite = Paint()..color = Colors.white;
     final cellSize = size.width / board.size;
     final halfCellSize = cellSize / 2;
     final stoneSize = cellSize / 3;
+    final paintBlack = Paint()..color = Colors.black;
+    final paintWhite = Paint()..color = Colors.white;
 
     for (var y = 0; y < board.size; y++) {
       for (var x = 0; x < board.size; x++) {
@@ -78,21 +79,22 @@ class OthelloPainter extends CustomPainter {
   }
 
   void _drawHighLight(Canvas canvas, Size size, double strokeWidth) {
+    final cellSize = size.width / board.size;
+    final strokeWidthHalf = strokeWidth / 2;
     final paint = Paint()
       ..color = Colors.orange
       ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
-    final strokeWidthHalf = strokeWidth / 2;
 
     for (var y = 0; y < board.size; y++) {
       for (var x = 0; x < board.size; x++) {
         if (board.get(x, y) == OthelloBoardCell.highLight) {
           canvas.drawRect(
               Rect.fromLTWH(
-                  (size.width / board.size) * x + strokeWidth + strokeWidthHalf,
-                  (size.height / board.size) * y + strokeWidth + strokeWidthHalf,
-                  (size.width / board.size) - strokeWidth * 2,
-                  (size.height / board.size) - strokeWidth * 2),
+                  cellSize * x + strokeWidth + strokeWidthHalf,
+                  cellSize * y + strokeWidth + strokeWidthHalf,
+                  cellSize - strokeWidth * 2,
+                  cellSize - strokeWidth * 2),
               paint);
         }
       }
