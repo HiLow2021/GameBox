@@ -4,16 +4,16 @@ import 'package:game_box/models/othello_board.dart';
 import 'package:game_box/models/othello_board_cell.dart';
 import 'package:game_box/models/vector.dart';
 
-class PaintCanvas extends CustomPainter {
-  final strokeWidthThreshold = 640;
+class OthelloPainter extends CustomPainter {
+  final _strokeWidthThreshold = 640;
 
   final OthelloBoard board;
 
-  PaintCanvas({required this.board});
+  OthelloPainter({required this.board});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final th = strokeWidthThreshold;
+    final th = _strokeWidthThreshold;
     final strokeWidth = size.width < th || size.height < th ? 2.0 : 4.0;
 
     _clipRect(canvas, size);

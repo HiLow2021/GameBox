@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:game_box/models/othello_board.dart';
-import 'package:game_box/views/components/paint_canvas.dart';
+import 'package:game_box/views/components/othello_painter.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: AspectRatio(
                 aspectRatio: 1,
                 child: CustomPaint(
-                  painter: PaintCanvas(board: board),
+                  painter: OthelloPainter(board: board),
                 ),
               )),
         ),
