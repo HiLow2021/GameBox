@@ -85,11 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 if (isSucceeded) {
                   setState(() => _useHighLight = false);
-                  
-                  if(_audioPlayer.state == PlayerState.playing){
+
+                  if (_audioPlayer.state == PlayerState.playing) {
                     await _audioPlayer.stop();
                   }
-                  
+
                   await _audioPlayer.play(AssetSource(putSound));
 
                   while (!_manager.isFinished &&
