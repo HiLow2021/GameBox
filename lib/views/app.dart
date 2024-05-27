@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:game_box/models/enums/player.dart';
@@ -31,7 +32,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const putSound = 'sounds/sound.mp3';
+
   final _key = GlobalKey();
+  final _audioPlayer = AudioPlayer();
   final _manager = OthelloManager(8);
 
   final _player = Player.black;
@@ -80,16 +84,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
 
                 if (isSucceeded) {
-                  _useHighLight = false;
+                  setState(() => _useHighLight = false);
+                  
+                  if(_audioPlayer.state == PlayerState.playing){
+                    await _audioPlayer.stop();
+                  }
+                  
+                  await _audioPlayer.play(AssetSource(putSound));
 
                   while (!_manager.isFinished &&
                       isOpponent(_manager.currentTurn)) {
                     await Future.delayed(const Duration(milliseconds: 500));
 
                     setState(() => _manager.nextByAI());
+                    await _audioPlayer.play(AssetSource(putSound));
                   }
 
-                  _useHighLight = true;
+                  setState(() => _useHighLight = true);
                 }
 
                 _canTap = true;
