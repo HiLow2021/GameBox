@@ -1,0 +1,1 @@
+enum Level { normal }
