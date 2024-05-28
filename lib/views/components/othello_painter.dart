@@ -3,18 +3,18 @@ import 'package:game_box/models/enums/othello_board_cell.dart';
 import 'package:game_box/models/othello_board.dart';
 
 class OthelloPainter extends CustomPainter {
-  final _strokeWidthThreshold = 480;
+  final bool small;
 
   final OthelloBoard board;
 
   bool useHighLight;
 
-  OthelloPainter({required this.board, this.useHighLight = true});
+  OthelloPainter(
+      {required this.board, required this.small, this.useHighLight = true});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final th = _strokeWidthThreshold;
-    final strokeWidth = size.width < th ? 2.0 : 4.0;
+    final strokeWidth = small ? 2.0 : 4.0;
     final s = Size(size.width - strokeWidth, size.height - strokeWidth);
 
     _clipRect(canvas, s, strokeWidth);

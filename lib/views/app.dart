@@ -33,6 +33,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const maxWidth = 600.0;
+  static const threshold = 600;
   static const putSound = 'sounds/sound.mp3';
 
   final _key = GlobalKey();
@@ -55,6 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final small = width < threshold;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -65,12 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
             padding: const EdgeInsets.all(40.0),
             child: SizedBox(
-              width: 600,
+              width: maxWidth,
               child: Column(
                 children: <Widget>[
-                  const Text('オセロ',
-                      style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                  Text('オセロ',
+                      style: TextStyle(
+                          fontSize: small ? 30 : 40,
+                          fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20.0),
                   AspectRatio(
                     aspectRatio: 1,
@@ -124,14 +130,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           key: _key,
                           painter: OthelloPainter(
                               board: _manager.board,
+                              small: small,
                               useHighLight: _useHighLight),
                         )),
                   ),
                   SizedBox(
                     width: double.infinity,
-                    height: 80,
+                    height: small ? 50 : 80,
                     child: CustomPaint(
-                      painter: OthelloTextPainter(manager: _manager, player: _player),
+                      painter: OthelloTextPainter(
+                          manager: _manager, small: small, player: _player),
                     ),
                   ),
                   const SizedBox(height: 20.0),
@@ -139,8 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       SizedBox(
-                        width: 200,
-                        height: 50,
+                        width: small ? 150 : 200,
+                        height: small ? 40 : 50,
                         child: FilledButton(
                             style: FilledButton.styleFrom(
                                 backgroundColor: Colors.green[700],
@@ -152,8 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 setState(() => _manager.initialize());
                               }
                             },
-                            child: const Text('リセット',
-                                style: TextStyle(fontSize: 24))),
+                            child: Text('リセット',
+                                style: TextStyle(fontSize: small ? 16 : 24))),
                       ),
                     ],
                   )

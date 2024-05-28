@@ -6,17 +6,18 @@ import 'package:game_box/models/enums/turn.dart';
 import 'package:game_box/models/othello_manager.dart';
 
 class OthelloTextPainter extends CustomPainter {
-  final _strokeWidthThreshold = 480;
+  final bool small;
 
   final OthelloManager manager;
 
   final Player player;
 
-  OthelloTextPainter({required this.manager, required this.player});
+  OthelloTextPainter(
+      {required this.manager, required this.small, required this.player});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width < _strokeWidthThreshold ? 2.0 : 4.0;
+    final strokeWidth = small ? 2.0 : 4.0;
     final s = Size(size.width - strokeWidth, size.height - strokeWidth);
 
     _clipRect(canvas, s, strokeWidth);
@@ -60,7 +61,7 @@ class OthelloTextPainter extends CustomPainter {
         text: _getText(),
         style: TextStyle(
           color: Colors.white,
-          fontSize: size.width < _strokeWidthThreshold ? 24 : 32,
+          fontSize: small ? 18 : 32,
         ),
       ),
       textDirection: TextDirection.ltr,
@@ -88,7 +89,7 @@ class OthelloTextPainter extends CustomPainter {
         text: manager.board.getCount(OthelloBoardCell.black).toString(),
         style: TextStyle(
           color: isBlack ? Colors.white : Colors.black,
-          fontSize: size.width < _strokeWidthThreshold ? 20 : 32,
+          fontSize: small ? 18 : 32,
         ),
       ),
       textAlign: TextAlign.center,
