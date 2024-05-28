@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _audioPlayer = AudioPlayer();
   final _manager = OthelloManager(8);
 
-  final _player = Player.black;
+  var _player = Player.black;
   var _useHighLight = true;
   var _canTap = true;
 
@@ -143,6 +145,83 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: small ? 30 : 40, vertical: small ? 12 : 20),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[350],
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 92, 92, 92),
+                            width: small ? 2 : 4)),
+                    child: Row(
+                      children: <Widget>[
+                        Builder(builder: (context) {
+                          final widget = <Widget>[
+                            Text('順番',
+                                style: TextStyle(
+                                    fontSize: small ? 16 : 20,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(
+                                width: small ? 0 : 20, height: small ? 10 : 0),
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color:
+                                          const Color.fromARGB(255, 92, 92, 92),
+                                      width: 1),
+                                  borderRadius: BorderRadius.circular(6)),
+                              child: DropdownButton<Player>(
+                                value: _player,
+                                focusColor: Colors.transparent,
+                                padding: EdgeInsets.fromLTRB(
+                                    20, 0, 10, small ? 0 : 5),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: small ? 16 : 20),
+                                underline: const SizedBox(),
+                                onChanged: (Player? value) async {
+                                  if (!_canTap ||
+                                      value == null ||
+                                      _player == value) {
+                                    return;
+                                  }
+
+                                  setState(() {
+                                    _player = value;
+                                    _manager.initialize();
+
+                                    if (_player == Player.white) {
+                                      _manager.nextByAI();
+                                    }
+                                  });
+
+                                  if (_player == Player.white) {
+                                    await _audioPlayer
+                                        .play(AssetSource(putSound));
+                                  }
+                                },
+                                items: Player.values
+                                    .map<DropdownMenuItem<Player>>((value) {
+                                  return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value == Player.black
+                                          ? '先手(黒)'
+                                          : '後手(白)'));
+                                }).toList(),
+                              ),
+                            ),
+                          ];
+
+                          if (small) {
+                            return Column(children: widget);
+                          } else {
+                            return Row(children: widget);
+                          }
+                        })
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -155,9 +234,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shape: const ContinuousRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8)))),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_canTap) {
-                                setState(() => _manager.initialize());
+                                setState(() {
+                                  _manager.initialize();
+
+                                  if (_player == Player.white) {
+                                    _manager.nextByAI();
+                                  }
+                                });
+
+                                if (_player == Player.white) {
+                                  await _audioPlayer
+                                      .play(AssetSource(putSound));
+                                }
                               }
                             },
                             child: Text('リセット',
