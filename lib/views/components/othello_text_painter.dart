@@ -86,7 +86,9 @@ class OthelloTextPainter extends CustomPainter {
 
     final textPainter = TextPainter(
       text: TextSpan(
-        text: manager.board.getCount(OthelloBoardCell.black).toString(),
+        text: manager.board
+            .getCount(isBlack ? OthelloBoardCell.black : OthelloBoardCell.white)
+            .toString(),
         style: TextStyle(
           color: isBlack ? Colors.white : Colors.black,
           fontSize: small ? 18 : 32,

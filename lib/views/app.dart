@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const maxWidth = 600.0;
+  static const maxWidth = 600;
   static const threshold = 600;
   static const putSound = 'sounds/sound.mp3';
 
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
             padding: const EdgeInsets.all(40.0),
             child: SizedBox(
-              width: maxWidth,
+              width: maxWidth.toDouble(),
               child: Column(
                 children: <Widget>[
                   Text('オセロ',
