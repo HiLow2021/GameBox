@@ -5,6 +5,7 @@ import 'package:game_box/models/enums/player.dart';
 import 'package:game_box/models/enums/turn.dart';
 import 'package:game_box/models/othello_manager.dart';
 import 'package:game_box/views/components/othello_painter.dart';
+import 'package:game_box/views/components/othello_text_painter.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -68,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 children: <Widget>[
                   const Text('オセロ',
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20.0),
                   AspectRatio(
                     aspectRatio: 1,
@@ -77,11 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (!_canTap) {
                             return;
                           }
-                        
+
                           _canTap = false;
-                        
+
                           var isSucceeded = false;
-                        
+
                           setState(() {
                             final size = getWidgetSize(_key);
                             if (size != null) {
@@ -90,39 +92,47 @@ class _MyHomePageState extends State<MyHomePage> {
                                   (details.localPosition.dx / cellSize).toInt();
                               final y =
                                   (details.localPosition.dy / cellSize).toInt();
-                        
+
                               isSucceeded = _manager.next(x, y);
                             }
                           });
-                        
+
                           if (isSucceeded) {
                             setState(() => _useHighLight = false);
-                        
+
                             if (_audioPlayer.state == PlayerState.playing) {
                               await _audioPlayer.stop();
                             }
-                        
+
                             await _audioPlayer.play(AssetSource(putSound));
-                        
+
                             while (!_manager.isFinished &&
                                 isOpponent(_manager.currentTurn)) {
                               await Future.delayed(
                                   const Duration(milliseconds: 500));
-                        
+
                               setState(() => _manager.nextByAI());
                               await _audioPlayer.play(AssetSource(putSound));
                             }
-                        
+
                             setState(() => _useHighLight = true);
                           }
-                        
+
                           _canTap = true;
                         },
                         child: CustomPaint(
                           key: _key,
                           painter: OthelloPainter(
-                              board: _manager.board, useHighLight: _useHighLight),
+                              board: _manager.board,
+                              useHighLight: _useHighLight),
                         )),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 80,
+                    child: CustomPaint(
+                      painter: OthelloTextPainter(manager: _manager, player: _player),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   Row(
@@ -142,8 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 setState(() => _manager.initialize());
                               }
                             },
-                            child:
-                                const Text('リセット', style: TextStyle(fontSize: 24))),
+                            child: const Text('リセット',
+                                style: TextStyle(fontSize: 24))),
                       ),
                     ],
                   )

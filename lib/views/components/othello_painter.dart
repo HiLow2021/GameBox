@@ -14,7 +14,7 @@ class OthelloPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final th = _strokeWidthThreshold;
-    final strokeWidth = size.width < th || size.height < th ? 2.0 : 4.0;
+    final strokeWidth = size.width < th ? 2.0 : 4.0;
     final s = Size(size.width - strokeWidth, size.height - strokeWidth);
 
     _clipRect(canvas, s, strokeWidth);
