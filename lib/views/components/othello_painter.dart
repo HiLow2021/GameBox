@@ -3,7 +3,7 @@ import 'package:game_box/models/enums/othello_board_cell.dart';
 import 'package:game_box/models/othello_board.dart';
 
 class OthelloPainter extends CustomPainter {
-  final _strokeWidthThreshold = 640;
+  final _strokeWidthThreshold = 480;
 
   final OthelloBoard board;
 
@@ -36,7 +36,7 @@ class OthelloPainter extends CustomPainter {
   }
 
   void _drawBoard(Canvas canvas, Size size, double strokeWidth) {
-    canvas.drawColor(const Color.fromARGB(255, 37, 183, 42), BlendMode.src);
+    canvas.drawColor(const Color.fromARGB(255, 0, 160, 0), BlendMode.src);
 
     final cellSize = size.width / board.size;
     final strokeWidthHalf = strokeWidth / 2;
