@@ -10,11 +10,11 @@ class SlidingPuzzlePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final outerStrokeWidth = small ? 10.0 : 20.0;
+    final strokeWidth = small ? 10.0 : 20.0;
 
     _clipRect(canvas, size);
-    _drawBoard(canvas, size, outerStrokeWidth);
-    _drawStone(canvas, size, outerStrokeWidth);
+    _drawBoard(canvas, size, strokeWidth);
+    _drawStone(canvas, size, strokeWidth);
   }
 
   @override
@@ -28,32 +28,32 @@ class SlidingPuzzlePainter extends CustomPainter {
     canvas.clipRect(rect);
   }
 
-  void _drawBoard(Canvas canvas, Size size, double outerStrokeWidth) {
-    final outerStrokeWidthHalf = outerStrokeWidth / 2;
+  void _drawBoard(Canvas canvas, Size size, double strokeWidth) {
+    final outerStrokeWidthHalf = strokeWidth / 2;
     final paint = Paint()
       ..color = Colors.black
-      ..strokeWidth = outerStrokeWidth
+      ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
     canvas.drawRect(
         Rect.fromLTWH(outerStrokeWidthHalf, outerStrokeWidthHalf,
-            size.width - outerStrokeWidth, size.height - outerStrokeWidth),
+            size.width - strokeWidth, size.height - strokeWidth),
         paint);
   }
 
-  void _drawStone(Canvas canvas, Size size, double outerStrokeWidth) {
-    final cellSize = (size.width - outerStrokeWidth * 2) / board.width;
+  void _drawStone(Canvas canvas, Size size, double strokeWidth) {
+    final cellSize = (size.width - strokeWidth * 2) / board.width;
     final cellSizeHalf = cellSize / 2;
-    final innerStrokeWidth = small ? 1 : 2;
+    final boarderStrokeWidth = small ? 1.0 : 2.0;
     final paintBoarder = Paint()
       ..color = const Color.fromARGB(255, 100, 100, 100)
-      ..strokeWidth = innerStrokeWidth.toDouble()
+      ..strokeWidth = boarderStrokeWidth
       ..style = PaintingStyle.stroke;
 
     for (var y = 0; y < board.height; y++) {
       for (var x = 0; x < board.width; x++) {
-        final rect = Rect.fromLTWH(cellSize * x + outerStrokeWidth,
-            cellSize * y + outerStrokeWidth, cellSize, cellSize);
+        final rect = Rect.fromLTWH(cellSize * x + strokeWidth,
+            cellSize * y + strokeWidth, cellSize, cellSize);
         final paintStone = Paint()..shader = _getShader(rect);
 
         canvas.drawRect(rect, paintStone);
@@ -71,7 +71,7 @@ class SlidingPuzzlePainter extends CustomPainter {
             Offset(
                 cellSize * x +
                     cellSizeHalf +
-                    outerStrokeWidth -
+                    strokeWidth -
                     textPainter.width / 2,
                 cellSize * y + cellSizeHalf));
         textPainter.dispose();
