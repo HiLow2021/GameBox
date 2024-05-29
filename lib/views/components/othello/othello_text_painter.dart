@@ -74,6 +74,7 @@ class OthelloTextPainter extends CustomPainter {
         (size.height - textPainter.height) / 2);
 
     textPainter.paint(canvas, offset);
+    textPainter.dispose();
   }
 
   void _drawCount(Canvas canvas, Size size, double strokeWidth, bool isBlack) {
@@ -108,6 +109,7 @@ class OthelloTextPainter extends CustomPainter {
     final offset = Offset(tx, (size.height - textPainter.height) / 2);
 
     textPainter.paint(canvas, offset);
+    textPainter.dispose();
   }
 
   String _getText() {

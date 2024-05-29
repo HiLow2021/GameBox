@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:game_box/views/othello.dart';
+import 'package:game_box/views/pages/othello.dart';
+import 'package:game_box/views/pages/sliding_puzzle.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,12 +28,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _selectedPageIndex = 0;
+  final _selectedPageIndex = 1;
 
   Widget getPage() {
     switch (_selectedPageIndex) {
       case 0:
         return const OthelloPage();
+      case 1:
+        return const SlidingPuzzlePage();
       default:
         throw Exception();
     }
@@ -45,7 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text(MyApp.title),
       ),
-      body: SingleChildScrollView(child: getPage()),
+      body: SingleChildScrollView(
+          child: Center(
+              child: Padding(
+                  padding: const EdgeInsets.all(40.0), child: getPage()))),
     );
   }
 }

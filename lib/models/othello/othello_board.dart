@@ -13,8 +13,8 @@ class OthelloBoard {
     _cells =
         List.generate(size, (i) => List.filled(size, OthelloBoardCell.empty));
 
-    validate();
     initialize();
+    validate();
   }
 
   void initialize() {

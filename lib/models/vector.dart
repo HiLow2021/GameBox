@@ -19,6 +19,13 @@ class Vector {
     Vector.upLeft
   ];
 
+  static final allWithoutDiagonal = [
+    Vector.up,
+    Vector.right,
+    Vector.down,
+    Vector.left,
+  ];
+
   final int x;
   final int y;
 
