@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:game_box/models/enums/othello_board_cell.dart';
-import 'package:game_box/models/othello_board.dart';
+import 'package:game_box/models/othello/enums/othello_board_cell.dart';
+import 'package:game_box/models/othello/othello_board.dart';
 
 class OthelloPainter extends CustomPainter {
   final bool small;

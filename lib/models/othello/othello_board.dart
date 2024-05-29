@@ -1,4 +1,4 @@
-import 'package:game_box/models/enums/othello_board_cell.dart';
+import 'package:game_box/models/othello/enums/othello_board_cell.dart';
 
 class OthelloBoard {
   List<List<OthelloBoardCell>> _cells = [];

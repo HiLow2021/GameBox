@@ -1,6 +1,6 @@
-import 'package:game_box/models/enums/othello_board_cell.dart';
-import 'package:game_box/models/othello_ai_manager.dart';
-import 'package:game_box/models/othello_manager_base.dart';
+import 'package:game_box/models/othello/enums/othello_board_cell.dart';
+import 'package:game_box/models/othello/othello_ai_manager.dart';
+import 'package:game_box/models/othello/othello_manager_base.dart';
 
 class OthelloManager extends OthelloManagerBase {
   OthelloManager(super.size);

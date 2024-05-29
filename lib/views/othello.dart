@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:game_box/models/enums/level.dart';
-import 'package:game_box/models/enums/player.dart';
-import 'package:game_box/models/enums/turn.dart';
-import 'package:game_box/models/othello_manager.dart';
+import 'package:game_box/models/othello/enums/level.dart';
+import 'package:game_box/models/othello/enums/player.dart';
+import 'package:game_box/models/othello/enums/turn.dart';
+import 'package:game_box/models/othello/othello_manager.dart';
 import 'package:game_box/views/components/othello_painter.dart';
 import 'package:game_box/views/components/othello_text_painter.dart';
 

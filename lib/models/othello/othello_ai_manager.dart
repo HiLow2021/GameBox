@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:game_box/models/enums/othello_board_cell.dart';
-import 'package:game_box/models/enums/turn.dart';
-import 'package:game_box/models/othello_manager_base.dart';
+import 'package:game_box/models/othello/enums/othello_board_cell.dart';
+import 'package:game_box/models/othello/enums/turn.dart';
+import 'package:game_box/models/othello/othello_manager_base.dart';
 import 'package:game_box/models/vector.dart';
 
 class OthelloAIManager extends OthelloManagerBase {

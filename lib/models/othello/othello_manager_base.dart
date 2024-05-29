@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:game_box/models/enums/othello_board_cell.dart';
-import 'package:game_box/models/enums/result.dart';
-import 'package:game_box/models/enums/turn.dart';
-import 'package:game_box/models/othello_board.dart';
+import 'package:game_box/models/othello/enums/othello_board_cell.dart';
+import 'package:game_box/models/othello/enums/result.dart';
+import 'package:game_box/models/othello/enums/turn.dart';
+import 'package:game_box/models/othello/othello_board.dart';
 import 'package:game_box/models/vector.dart';
 
 abstract class OthelloManagerBase {
