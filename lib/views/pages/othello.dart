@@ -19,7 +19,7 @@ class OthelloPage extends StatefulWidget {
 class _OthelloPageState extends State<OthelloPage> {
   static const maxWidth = 600;
   static const threshold = 600;
-  static const putSound = 'sounds/sound.mp3';
+  static const putSound = 'othello/sound.mp3';
 
   final _key = GlobalKey();
   final _audioPlayer = AudioPlayer();

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:game_box/models/sliding_puzzle/sliding_puzzle_board.dart';
+import 'package:game_box/models/sliding_puzzle/sliding_puzzle_manager.dart';
 
 class SlidingPuzzlePainter extends CustomPainter {
   final bool small;
 
-  final SlidingPuzzleBoard board;
+  final double strokeWidth;
 
-  SlidingPuzzlePainter({required this.board, required this.small});
+  final SlidingPuzzleManager manager;
+
+  SlidingPuzzlePainter(
+      {required this.manager, required this.small, required this.strokeWidth});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = small ? 10.0 : 20.0;
-
     _clipRect(canvas, size);
-    _drawBoard(canvas, size, strokeWidth);
-    _drawStone(canvas, size, strokeWidth);
+    _drawBoard(canvas, size);
+    _drawStone(canvas, size);
   }
 
   @override
@@ -28,7 +29,7 @@ class SlidingPuzzlePainter extends CustomPainter {
     canvas.clipRect(rect);
   }
 
-  void _drawBoard(Canvas canvas, Size size, double strokeWidth) {
+  void _drawBoard(Canvas canvas, Size size) {
     final outerStrokeWidthHalf = strokeWidth / 2;
     final paint = Paint()
       ..color = Colors.black
@@ -41,9 +42,10 @@ class SlidingPuzzlePainter extends CustomPainter {
         paint);
   }
 
-  void _drawStone(Canvas canvas, Size size, double strokeWidth) {
-    final cellSize = (size.width - strokeWidth * 2) / board.width;
-    final cellSizeHalf = cellSize / 2;
+  void _drawStone(Canvas canvas, Size size) {
+    final board = manager.board;
+    final cellSizeX = (size.width - strokeWidth * 2) / board.width;
+    final cellSizeY = (size.height - strokeWidth * 2) / board.height;
     final boarderStrokeWidth = small ? 1.0 : 2.0;
     final paintBoarder = Paint()
       ..color = const Color.fromARGB(255, 100, 100, 100)
@@ -52,28 +54,28 @@ class SlidingPuzzlePainter extends CustomPainter {
 
     for (var y = 0; y < board.height; y++) {
       for (var x = 0; x < board.width; x++) {
-        final rect = Rect.fromLTWH(cellSize * x + strokeWidth,
-            cellSize * y + strokeWidth, cellSize, cellSize);
+        final cell = manager.board.get(x, y);
+        if (cell == null || cell == manager.missingNumber) {
+          continue;
+        }
+
+        final rect = Rect.fromLTWH(cellSizeX * x + strokeWidth,
+            cellSizeY * y + strokeWidth, cellSizeX, cellSizeY);
         final paintStone = Paint()..shader = _getShader(rect);
 
         canvas.drawRect(rect, paintStone);
         canvas.drawRect(rect, paintBoarder);
-      }
-    }
 
-    var i = 0;
-    for (var y = 0; y < board.height; y++) {
-      for (var x = 0; x < board.width; x++) {
-        final textPainter = _getTextPainter((++i).toString(), size);
+        final textPainter = _getTextPainter((cell + 1).toString(), size);
 
         textPainter.paint(
             canvas,
             Offset(
-                cellSize * x +
-                    cellSizeHalf +
+                cellSizeX * x +
+                    cellSizeX / 2 +
                     strokeWidth -
                     textPainter.width / 2,
-                cellSize * y + cellSizeHalf));
+                cellSizeY * y + cellSizeY / 2));
         textPainter.dispose();
       }
     }

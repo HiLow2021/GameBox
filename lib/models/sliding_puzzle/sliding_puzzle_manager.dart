@@ -4,7 +4,7 @@ import 'package:game_box/models/vector.dart';
 class SlidingPuzzleManager {
   int _step = 0;
 
-  late List<List> _question;
+  late List<List<int>> _question;
 
   late SlidingPuzzleBoard board;
 
@@ -18,7 +18,7 @@ class SlidingPuzzleManager {
   SlidingPuzzleManager(int width, int height, int? missingNumber) {
     board = SlidingPuzzleBoard(width, height);
     this.missingNumber = missingNumber ?? board.square - 1;
-    _question = board.cells.toList();
+    _question = _clone(board.cells);
 
     initialize();
     _validate();
@@ -81,11 +81,24 @@ class SlidingPuzzleManager {
     }
   }
 
-  void _copy<T>(List<List<T>> source, List<List<T>> destination) {
+  void _copy<int>(List<List<int>> source, List<List<int>> destination) {
     for (var y = 0; y < source.length; y++) {
       for (var x = 0; x < source[y].length; x++) {
         destination[y][x] = source[y][x];
       }
     }
+  }
+
+  List<List<int>> _clone(List<List<int>> source) {
+    var destination =
+        List.generate(source.length, (i) => List.filled(source[i].length, i));
+
+    for (var y = 0; y < source.length; y++) {
+      for (var x = 0; x < source[y].length; x++) {
+        destination[y][x] = source[y][x];
+      }
+    }
+
+    return destination;
   }
 }
