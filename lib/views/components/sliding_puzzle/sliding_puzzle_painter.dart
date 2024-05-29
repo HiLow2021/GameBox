@@ -106,8 +106,8 @@ class SlidingPuzzlePainter extends CustomPainter {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Color.fromARGB(255, 200, 200, 200),
-        Color.fromARGB(255, 150, 150, 150),
+        Color.fromARGB(255, 238, 238, 238),
+        Color.fromARGB(255, 187, 187, 187),
       ],
     ).createShader(rect);
   }
