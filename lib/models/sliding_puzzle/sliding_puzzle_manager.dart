@@ -81,14 +81,6 @@ class SlidingPuzzleManager {
     }
   }
 
-  void _copy<int>(List<List<int>> source, List<List<int>> destination) {
-    for (var y = 0; y < source.length; y++) {
-      for (var x = 0; x < source[y].length; x++) {
-        destination[y][x] = source[y][x];
-      }
-    }
-  }
-
   List<List<int>> _clone(List<List<int>> source) {
     var destination =
         List.generate(source.length, (i) => List.filled(source[i].length, i));
@@ -100,5 +92,13 @@ class SlidingPuzzleManager {
     }
 
     return destination;
+  }
+
+  void _copy<int>(List<List<int>> source, List<List<int>> destination) {
+    for (var y = 0; y < source.length; y++) {
+      for (var x = 0; x < source[y].length; x++) {
+        destination[y][x] = source[y][x];
+      }
+    }
   }
 }

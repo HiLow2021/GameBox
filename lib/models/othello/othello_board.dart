@@ -1,7 +1,7 @@
 import 'package:game_box/models/othello/enums/othello_board_cell.dart';
 
 class OthelloBoard {
-  List<List<OthelloBoardCell>> _cells = [];
+  late List<List<OthelloBoardCell>> _cells;
 
   int size;
 

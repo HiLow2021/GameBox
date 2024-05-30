@@ -1,7 +1,7 @@
 import 'package:game_box/models/vector.dart';
 
 class SlidingPuzzleBoard {
-  List<List<int>> _cells = [];
+  late List<List<int>> _cells;
 
   final int width;
 
