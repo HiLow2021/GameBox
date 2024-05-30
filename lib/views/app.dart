@@ -102,22 +102,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text(MyApp.title),
       ),
       drawer: isMiddle ? null : drawer(),
-      body: isMiddle
-          ? Row(
-              children: <Widget>[
-                SafeArea(
+      body: Row(
+        children: <Widget?>[
+          isMiddle
+              ? SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: sideBar(width),
                   ),
-                ),
-                const VerticalDivider(thickness: 1, width: 1),
-                Expanded(
-                  child: mainContent(),
-                ),
-              ],
-            )
-          : mainContent(),
+                )
+              : null,
+          isMiddle ? const VerticalDivider(thickness: 1, width: 1) : null,
+          Expanded(
+            child: mainContent(),
+          ),
+        ].where((x) => x != null).cast<Widget>().toList(),
+      ),
     );
   }
 }
