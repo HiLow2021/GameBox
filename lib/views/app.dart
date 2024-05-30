@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_box/views/navigation.dart';
 import 'package:game_box/views/pages/othello.dart';
 import 'package:game_box/views/pages/sliding_puzzle.dart';
 
@@ -28,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _selectedPageIndex = 1;
+  var _selectedPageIndex = 0;
 
   Widget getPage() {
     switch (_selectedPageIndex) {
@@ -47,6 +48,29 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text(MyApp.title),
+      ),
+      drawer: NavigationDrawer(
+        onDestinationSelected: (value) =>
+            setState(() => _selectedPageIndex = value),
+        selectedIndex: _selectedPageIndex,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
+            child: Text(
+              'ゲーム一覧',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ),
+          ...destinations.map(
+            (Navigation destination) {
+              return NavigationDrawerDestination(
+                label: Text(destination.label),
+                icon: destination.icon,
+                selectedIcon: destination.selectedIcon,
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
           child: Center(
