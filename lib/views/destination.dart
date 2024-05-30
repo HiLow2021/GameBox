@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:game_box/views/pages/othello.dart';
+import 'package:game_box/views/pages/sliding_puzzle.dart';
 
 class Destination {
   const Destination(this.label, this.icon, this.selectedIcon);
@@ -9,6 +11,8 @@ class Destination {
 }
 
 const List<Destination> destinations = <Destination>[
-  Destination('オセロ', Icon(Icons.sports_esports_outlined), Icon(Icons.sports_esports)),
-  Destination('スライドパズル', Icon(Icons.sports_esports_outlined), Icon(Icons.sports_esports)),
+  Destination(OthelloPage.title, Icon(Icons.sports_esports_outlined),
+      Icon(Icons.sports_esports)),
+  Destination(SlidingPuzzlePage.title, Icon(Icons.sports_esports_outlined),
+      Icon(Icons.sports_esports)),
 ];

@@ -12,27 +12,29 @@ import 'package:game_box/views/components/othello/othello_text_painter.dart';
 class OthelloPage extends StatefulWidget {
   const OthelloPage({super.key});
 
+  static const title = 'オセロ';
+
   @override
   State<OthelloPage> createState() => _OthelloPageState();
 }
 
 class _OthelloPageState extends State<OthelloPage> {
-  static const maxWidth = 600;
+  static const double maxWidth = 600;
   static const threshold = 600;
   static const putSound = 'othello/sound.mp3';
 
-  final _key = GlobalKey();
-  final _audioPlayer = AudioPlayer();
-  final _manager = OthelloManager(8);
+  final key = GlobalKey();
+  final audioPlayer = AudioPlayer();
+  final manager = OthelloManager(8);
 
-  var _player = Player.black;
-  var _level = Level.normal;
-  var _useHighLight = true;
-  var _canTap = true;
+  var player = Player.black;
+  var level = Level.normal;
+  var useHighLight = true;
+  var canTap = true;
 
   bool isOpponent(Turn currentTurn) =>
-      (currentTurn == Turn.white && _player == Player.black) ||
-      (currentTurn == Turn.black && _player == Player.white);
+      (currentTurn == Turn.white && player == Player.black) ||
+      (currentTurn == Turn.black && player == Player.white);
 
   Size? getWidgetSize(GlobalKey key) {
     final size = key.currentContext?.size;
@@ -46,64 +48,64 @@ class _OthelloPageState extends State<OthelloPage> {
     final small = width < threshold;
 
     return SizedBox(
-      width: maxWidth.toDouble(),
+      width: maxWidth,
       child: Column(
         children: <Widget>[
-          Text('オセロ',
+          Text(OthelloPage.title,
               style: TextStyle(
                   fontSize: small ? 30 : 40, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 20),
           AspectRatio(
             aspectRatio: 1,
             child: GestureDetector(
                 onPanStart: (DragStartDetails details) async {
-                  if (!_canTap) {
+                  if (!canTap) {
                     return;
                   }
       
-                  _canTap = false;
+                  canTap = false;
       
                   var isSucceeded = false;
       
                   setState(() {
-                    final size = getWidgetSize(_key);
+                    final size = getWidgetSize(key);
                     if (size != null) {
-                      final cellSize = size.width / _manager.board.size;
+                      final cellSize = size.width / manager.board.size;
                       final x = (details.localPosition.dx / cellSize).toInt();
                       final y = (details.localPosition.dy / cellSize).toInt();
       
-                      isSucceeded = _manager.next(x, y);
+                      isSucceeded = manager.next(x, y);
                     }
                   });
       
                   if (isSucceeded) {
-                    setState(() => _useHighLight = false);
+                    setState(() => useHighLight = false);
       
-                    if (_audioPlayer.state == PlayerState.playing) {
-                      await _audioPlayer.stop();
+                    if (audioPlayer.state == PlayerState.playing) {
+                      await audioPlayer.stop();
                     }
       
-                    await _audioPlayer.play(AssetSource(putSound));
+                    await audioPlayer.play(AssetSource(putSound));
       
-                    while (!_manager.isFinished &&
-                        isOpponent(_manager.currentTurn)) {
+                    while (!manager.isFinished &&
+                        isOpponent(manager.currentTurn)) {
                       await Future.delayed(const Duration(milliseconds: 500));
       
-                      setState(() => _manager.nextByAI());
-                      await _audioPlayer.play(AssetSource(putSound));
+                      setState(() => manager.nextByAI());
+                      await audioPlayer.play(AssetSource(putSound));
                     }
       
-                    setState(() => _useHighLight = true);
+                    setState(() => useHighLight = true);
                   }
       
-                  _canTap = true;
+                  canTap = true;
                 },
                 child: CustomPaint(
-                  key: _key,
+                  key: key,
                   painter: OthelloPainter(
-                      board: _manager.board,
+                      board: manager.board,
                       small: small,
-                      useHighLight: _useHighLight),
+                      useHighLight: useHighLight),
                 )),
           ),
           SizedBox(
@@ -111,10 +113,10 @@ class _OthelloPageState extends State<OthelloPage> {
             height: small ? 50 : 80,
             child: CustomPaint(
               painter: OthelloTextPainter(
-                  manager: _manager, small: small, player: _player),
+                  manager: manager, small: small, player: player),
             ),
           ),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 20),
           Container(
             padding:
                 EdgeInsets.symmetric(horizontal: 20, vertical: small ? 12 : 20),
@@ -140,28 +142,28 @@ class _OthelloPageState extends State<OthelloPage> {
                               width: 1),
                           borderRadius: BorderRadius.circular(6)),
                       child: DropdownButton<Player>(
-                        value: _player,
+                        value: player,
                         focusColor: Colors.transparent,
                         padding: EdgeInsets.fromLTRB(20, 0, 10, small ? 0 : 5),
                         style: TextStyle(
                             color: Colors.black, fontSize: small ? 16 : 20),
                         underline: const SizedBox(),
                         onChanged: (Player? value) async {
-                          if (!_canTap || value == null || _player == value) {
+                          if (!canTap || value == null || player == value) {
                             return;
                           }
       
                           setState(() {
-                            _player = value;
-                            _manager.initialize();
+                            player = value;
+                            manager.initialize();
       
-                            if (_player == Player.white) {
-                              _manager.nextByAI();
+                            if (player == Player.white) {
+                              manager.nextByAI();
                             }
                           });
       
-                          if (_player == Player.white) {
-                            await _audioPlayer.play(AssetSource(putSound));
+                          if (player == Player.white) {
+                            await audioPlayer.play(AssetSource(putSound));
                           }
                         },
                         items:
@@ -195,28 +197,28 @@ class _OthelloPageState extends State<OthelloPage> {
                               width: 1),
                           borderRadius: BorderRadius.circular(6)),
                       child: DropdownButton<Level>(
-                        value: _level,
+                        value: level,
                         focusColor: Colors.transparent,
                         padding: EdgeInsets.fromLTRB(20, 0, 10, small ? 0 : 5),
                         style: TextStyle(
                             color: Colors.black, fontSize: small ? 16 : 20),
                         underline: const SizedBox(),
                         onChanged: (Level? value) async {
-                          if (!_canTap || value == null || _level == value) {
+                          if (!canTap || value == null || level == value) {
                             return;
                           }
       
                           setState(() {
-                            _level = value;
-                            _manager.initialize();
+                            level = value;
+                            manager.initialize();
       
-                            if (_player == Player.white) {
-                              _manager.nextByAI();
+                            if (player == Player.white) {
+                              manager.nextByAI();
                             }
                           });
       
-                          if (_player == Player.white) {
-                            await _audioPlayer.play(AssetSource(putSound));
+                          if (player == Player.white) {
+                            await audioPlayer.play(AssetSource(putSound));
                           }
                         },
                         items: Level.values.map<DropdownMenuItem<Level>>((value) {
@@ -236,7 +238,7 @@ class _OthelloPageState extends State<OthelloPage> {
               ],
             ),
           ),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -249,17 +251,17 @@ class _OthelloPageState extends State<OthelloPage> {
                         shape: const ContinuousRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(8)))),
                     onPressed: () async {
-                      if (_canTap) {
+                      if (canTap) {
                         setState(() {
-                          _manager.initialize();
+                          manager.initialize();
       
-                          if (_player == Player.white) {
-                            _manager.nextByAI();
+                          if (player == Player.white) {
+                            manager.nextByAI();
                           }
                         });
       
-                        if (_player == Player.white) {
-                          await _audioPlayer.play(AssetSource(putSound));
+                        if (player == Player.white) {
+                          await audioPlayer.play(AssetSource(putSound));
                         }
                       }
                     },

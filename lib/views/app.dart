@@ -31,10 +31,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const thresholdWide = 1200;
   static const thresholdMiddle = 800;
-  var _selectedPageIndex = 0;
+  
+  var selectedPageIndex = 0;
 
   Widget getPage() {
-    switch (_selectedPageIndex) {
+    switch (selectedPageIndex) {
       case 0:
         return const OthelloPage();
       case 1:
@@ -46,9 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget drawer() {
     return NavigationDrawer(
-      selectedIndex: _selectedPageIndex,
+      selectedIndex: selectedPageIndex,
       onDestinationSelected: (value) =>
-          setState(() => _selectedPageIndex = value),
+          setState(() => selectedPageIndex = value),
       children: <Widget>[
         const SizedBox(height: 20),
         ...destinations.map(
@@ -71,9 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
       extended: isWide,
       labelType:
           isWide ? NavigationRailLabelType.none : NavigationRailLabelType.all,
-      selectedIndex: _selectedPageIndex,
+      selectedIndex: selectedPageIndex,
       onDestinationSelected: (value) =>
-          setState(() => _selectedPageIndex = value),
+          setState(() => selectedPageIndex = value),
       destinations: destinations.map((Destination destination) {
         return NavigationRailDestination(
             label:
@@ -87,8 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget mainContent() {
     return SingleChildScrollView(
         child: Center(
-            child: Padding(
-                padding: const EdgeInsets.all(40.0), child: getPage())));
+            child:
+                Padding(padding: const EdgeInsets.all(40), child: getPage())));
   }
 
   @override

@@ -7,19 +7,22 @@ import 'package:game_box/views/components/sliding_puzzle/sliding_puzzle_text_pai
 class SlidingPuzzlePage extends StatefulWidget {
   const SlidingPuzzlePage({super.key});
 
+  static const title = 'スライドパズル';
+
   @override
   State<SlidingPuzzlePage> createState() => _SlidingPuzzlePageState();
 }
 
 class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
-  static const maxWidth = 600;
+  static const double maxWidth = 600;
   static const threshold = 600;
   static const slideSound = 'sliding_puzzle/sound.mp3';
 
-  final _key = GlobalKey();
-  final _audioPlayer = AudioPlayer();
-  var _manager = SlidingPuzzleManager(4, 4, null)..initialize();
-  var _size = 4;
+  final key = GlobalKey();
+  final audioPlayer = AudioPlayer();
+
+  var manager = SlidingPuzzleManager(4, 4, null)..initialize();
+  var size = 4;
 
   Size? getWidgetSize(GlobalKey key) {
     final size = key.currentContext?.size;
@@ -31,13 +34,13 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final small = width < threshold;
-    final strokeWidth = small ? 10.0 : 20.0;
+    final double strokeWidth = small ? 10 : 20;
 
     return SizedBox(
-      width: maxWidth.toDouble(),
+      width: maxWidth,
       child: Column(
         children: <Widget>[
-          Text('スライドパズル',
+          Text(SlidingPuzzlePage.title,
               style: TextStyle(
                   fontSize: small ? 30 : 40, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
@@ -45,19 +48,19 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
             aspectRatio: 1,
             child: GestureDetector(
                 onPanStart: (DragStartDetails details) async {
-                  if (_manager.isSorted) {
+                  if (manager.isSorted) {
                     return;
                   }
 
                   var isSucceeded = false;
 
                   setState(() {
-                    final size = getWidgetSize(_key);
+                    final size = getWidgetSize(key);
                     if (size != null) {
                       final cellSizeX =
-                          (size.width - strokeWidth * 2) / _manager.board.width;
+                          (size.width - strokeWidth * 2) / manager.board.width;
                       final cellSizeY = (size.height - strokeWidth * 2) /
-                          _manager.board.height;
+                          manager.board.height;
                       final x =
                           ((details.localPosition.dx - strokeWidth) / cellSizeX)
                               .toInt();
@@ -65,24 +68,22 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
                           ((details.localPosition.dy - strokeWidth) / cellSizeY)
                               .toInt();
 
-                      isSucceeded = _manager.slide(x, y);
+                      isSucceeded = manager.slide(x, y);
                     }
                   });
 
                   if (isSucceeded) {
-                    if (_audioPlayer.state == PlayerState.playing) {
-                      await _audioPlayer.stop();
+                    if (audioPlayer.state == PlayerState.playing) {
+                      await audioPlayer.stop();
                     }
 
-                    await _audioPlayer.play(AssetSource(slideSound));
+                    await audioPlayer.play(AssetSource(slideSound));
                   }
                 },
                 child: CustomPaint(
-                  key: _key,
+                  key: key,
                   painter: SlidingPuzzlePainter(
-                      manager: _manager,
-                      small: small,
-                      strokeWidth: strokeWidth),
+                      manager: manager, small: small, strokeWidth: strokeWidth),
                 )),
           ),
           const SizedBox(height: 20),
@@ -90,8 +91,7 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
             width: double.infinity,
             height: small ? 50 : 80,
             child: CustomPaint(
-              painter:
-                  SlidingPuzzleTextPainter(manager: _manager, small: small),
+              painter: SlidingPuzzleTextPainter(manager: manager, small: small),
             ),
           ),
           const SizedBox(height: 20),
@@ -120,20 +120,20 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
                               width: 1),
                           borderRadius: BorderRadius.circular(6)),
                       child: DropdownButton<int>(
-                        value: _size,
+                        value: size,
                         focusColor: Colors.transparent,
                         padding: EdgeInsets.fromLTRB(20, 0, 10, small ? 0 : 5),
                         style: TextStyle(
                             color: Colors.black, fontSize: small ? 16 : 20),
                         underline: const SizedBox(),
                         onChanged: (int? value) async {
-                          if (value == null || _size == value) {
+                          if (value == null || size == value) {
                             return;
                           }
 
                           setState(() {
-                            _size = value;
-                            _manager = SlidingPuzzleManager(value, value, null);
+                            size = value;
+                            manager = SlidingPuzzleManager(value, value, null);
                           });
                         },
                         items: List.generate(3, (i) => i + 3)
@@ -154,7 +154,7 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
               ],
             ),
           ),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -167,7 +167,7 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
                         shape: const ContinuousRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(8)))),
-                    onPressed: () => setState(() => _manager.reset()),
+                    onPressed: () => setState(() => manager.reset()),
                     child: Text('リセット',
                         style: TextStyle(fontSize: small ? 16 : 24))),
               ),
@@ -181,7 +181,7 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
                         shape: const ContinuousRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(8)))),
-                    onPressed: () => setState(() => _manager.initialize()),
+                    onPressed: () => setState(() => manager.initialize()),
                     child: Text('次の問題',
                         style: TextStyle(fontSize: small ? 16 : 24))),
               ),
