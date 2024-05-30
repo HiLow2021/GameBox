@@ -43,10 +43,10 @@ class SlidingPuzzlePainter extends CustomPainter {
   }
 
   void _drawStone(Canvas canvas, Size size) {
+    final double boarderStrokeWidth = small ? 1 : 2;
     final board = manager.board;
     final cellSizeX = (size.width - strokeWidth * 2) / board.width;
     final cellSizeY = (size.height - strokeWidth * 2) / board.height;
-    final boarderStrokeWidth = small ? 1.0 : 2.0;
     final paintBoarder = Paint()
       ..color = const Color.fromARGB(255, 100, 100, 100)
       ..strokeWidth = boarderStrokeWidth
@@ -66,7 +66,9 @@ class SlidingPuzzlePainter extends CustomPainter {
         canvas.drawRect(rect, paintStone);
         canvas.drawRect(rect, paintBoarder);
 
-        final textPainter = _getTextPainter((cell + 1).toString(), size);
+        final isCorrect = y * board.height + x == cell;
+        final textPainter =
+            _getTextPainter((cell + 1).toString(), size, isCorrect);
 
         textPainter.paint(
             canvas,
@@ -81,12 +83,14 @@ class SlidingPuzzlePainter extends CustomPainter {
     }
   }
 
-  TextPainter _getTextPainter(String text, Size size) {
+  TextPainter _getTextPainter(String text, Size size, bool isCorrect) {
     final textPainter = TextPainter(
       text: TextSpan(
         text: text,
         style: TextStyle(
-          color: const Color.fromARGB(255, 60, 60, 60),
+          color: isCorrect
+              ? Colors.blue
+              : const Color.fromARGB(255, 60, 60, 60),
           fontSize: small ? 20 : 32,
         ),
       ),
