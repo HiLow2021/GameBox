@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:game_box/models/sliding_puzzle/sliding_puzzle_manager.dart';
@@ -20,7 +18,8 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
 
   final _key = GlobalKey();
   final _audioPlayer = AudioPlayer();
-  final _manager = SlidingPuzzleManager(4, 4, null)..initialize();
+  var _manager = SlidingPuzzleManager(4, 4, null)..initialize();
+  var _size = 4;
 
   Size? getWidgetSize(GlobalKey key) {
     final size = key.currentContext?.size;
@@ -89,6 +88,66 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
             child: CustomPaint(
               painter:
                   SlidingPuzzleTextPainter(manager: _manager, small: small),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding:
+                EdgeInsets.symmetric(horizontal: 20, vertical: small ? 12 : 20),
+            decoration: BoxDecoration(
+                color: Colors.grey[350],
+                border: Border.all(
+                    color: const Color.fromARGB(255, 92, 92, 92),
+                    width: small ? 2 : 4)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Builder(builder: (context) {
+                  final widget = <Widget>[
+                    Text('サイズ',
+                        style: TextStyle(
+                            fontSize: small ? 16 : 20,
+                            fontWeight: FontWeight.bold)),
+                    SizedBox(width: small ? 0 : 20, height: small ? 10 : 0),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 92, 92, 92),
+                              width: 1),
+                          borderRadius: BorderRadius.circular(6)),
+                      child: DropdownButton<int>(
+                        value: _size,
+                        focusColor: Colors.transparent,
+                        padding: EdgeInsets.fromLTRB(20, 0, 10, small ? 0 : 5),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: small ? 16 : 20),
+                        underline: const SizedBox(),
+                        onChanged: (int? value) async {
+                          if (value == null || _size == value) {
+                            return;
+                          }
+
+                          setState(() {
+                            _size = value;
+                            _manager = SlidingPuzzleManager(value, value, null);
+                          });
+                        },
+                        items: List.generate(3, (i) => i + 3)
+                            .map<DropdownMenuItem<int>>((value) {
+                          return DropdownMenuItem(
+                              value: value, child: Text(value.toString()));
+                        }).toList(),
+                      ),
+                    ),
+                  ];
+
+                  if (small) {
+                    return Column(children: widget);
+                  } else {
+                    return Row(children: widget);
+                  }
+                }),
+              ],
             ),
           ),
           const SizedBox(height: 20.0),
