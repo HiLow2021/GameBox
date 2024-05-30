@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:game_box/models/sliding_puzzle/sliding_puzzle_manager.dart';
 import 'package:game_box/views/components/sliding_puzzle/sliding_puzzle_painter.dart';
+import 'package:game_box/views/components/sliding_puzzle/sliding_puzzle_text_painter.dart';
 
 class SlidingPuzzlePage extends StatefulWidget {
   const SlidingPuzzlePage({super.key});
@@ -80,6 +81,15 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
                       small: small,
                       strokeWidth: strokeWidth),
                 )),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: small ? 50 : 80,
+            child: CustomPaint(
+              painter:
+                  SlidingPuzzleTextPainter(manager: _manager, small: small),
+            ),
           ),
           const SizedBox(height: 20.0),
           Row(
