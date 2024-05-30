@@ -29,6 +29,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const thresholdWide = 1200;
+  static const thresholdMiddle = 780;
   var _selectedPageIndex = 0;
 
   Widget getPage() {
@@ -44,23 +46,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text(MyApp.title),
       ),
-      drawer: NavigationDrawer(
+      drawer: width <= thresholdMiddle ? NavigationDrawer(
+        selectedIndex: _selectedPageIndex,
         onDestinationSelected: (value) =>
             setState(() => _selectedPageIndex = value),
-        selectedIndex: _selectedPageIndex,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
-            child: Text(
-              'ゲーム一覧',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
+          const SizedBox(height: 20),
           ...destinations.map(
             (Navigation destination) {
               return NavigationDrawerDestination(
@@ -71,11 +69,43 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ],
-      ),
-      body: SingleChildScrollView(
-          child: Center(
-              child: Padding(
-                  padding: const EdgeInsets.all(40.0), child: getPage()))),
+      ) : null,
+      body: width > thresholdMiddle
+          ? Row(
+              children: <Widget>[
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: NavigationRail(
+                      extended: width > thresholdWide,
+                      labelType: width > thresholdWide
+                          ? NavigationRailLabelType.none
+                          : NavigationRailLabelType.all,
+                      selectedIndex: _selectedPageIndex,
+                      onDestinationSelected: (value) =>
+                          setState(() => _selectedPageIndex = value),
+                      destinations: destinations.map((Navigation destination) {
+                        return NavigationRailDestination(
+                            label: Text(destination.label),
+                            icon: destination.icon,
+                            selectedIcon: destination.selectedIcon);
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                      child: Center(
+                          child: Padding(
+                              padding: const EdgeInsets.all(40.0),
+                              child: getPage()))),
+                ),
+              ],
+            )
+          : SingleChildScrollView(
+              child: Center(
+                  child: Padding(
+                      padding: const EdgeInsets.all(40.0), child: getPage()))),
     );
   }
 }
