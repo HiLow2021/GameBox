@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:game_box/models/othello/enums/othello_board_cell.dart';
 import 'package:game_box/models/othello/othello_board.dart';
+import 'package:game_box/models/othello/othello_manager.dart';
 
 class OthelloPainter extends CustomPainter {
   final bool small;
 
-  final OthelloBoard board;
+  final OthelloManager manager;
 
   bool useHighLight;
 
+  OthelloBoard get board => manager.board;
+
   OthelloPainter(
-      {required this.board, required this.small, this.useHighLight = true});
+      {required this.manager, required this.small, this.useHighLight = true});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = small ? 2.0 : 4.0;
+    final double strokeWidth = small ? 2 : 4;
     final s = Size(size.width - strokeWidth, size.height - strokeWidth);
 
     _clipRect(canvas, s, strokeWidth);

@@ -4,9 +4,9 @@ import 'package:game_box/models/sliding_puzzle/sliding_puzzle_manager.dart';
 class SlidingPuzzlePainter extends CustomPainter {
   final bool small;
 
-  final double strokeWidth;
-
   final SlidingPuzzleManager manager;
+
+  final double strokeWidth;
 
   SlidingPuzzlePainter(
       {required this.manager, required this.small, required this.strokeWidth});
@@ -88,9 +88,8 @@ class SlidingPuzzlePainter extends CustomPainter {
       text: TextSpan(
         text: text,
         style: TextStyle(
-          color: isCorrect
-              ? Colors.blue
-              : const Color.fromARGB(255, 60, 60, 60),
+          color:
+              isCorrect ? Colors.blue : const Color.fromARGB(255, 60, 60, 60),
           fontSize: small ? 20 : 32,
         ),
       ),

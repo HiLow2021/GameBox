@@ -62,48 +62,48 @@ class _OthelloPageState extends State<OthelloPage> {
                   if (!canTap) {
                     return;
                   }
-      
+
                   canTap = false;
-      
+
                   var isSucceeded = false;
-      
+
                   setState(() {
                     final size = getWidgetSize(key);
                     if (size != null) {
                       final cellSize = size.width / manager.board.size;
                       final x = (details.localPosition.dx / cellSize).toInt();
                       final y = (details.localPosition.dy / cellSize).toInt();
-      
+
                       isSucceeded = manager.next(x, y);
                     }
                   });
-      
+
                   if (isSucceeded) {
                     setState(() => useHighLight = false);
-      
+
                     if (audioPlayer.state == PlayerState.playing) {
                       await audioPlayer.stop();
                     }
-      
+
                     await audioPlayer.play(AssetSource(putSound));
-      
+
                     while (!manager.isFinished &&
                         isOpponent(manager.currentTurn)) {
                       await Future.delayed(const Duration(milliseconds: 500));
-      
+
                       setState(() => manager.nextByAI());
                       await audioPlayer.play(AssetSource(putSound));
                     }
-      
+
                     setState(() => useHighLight = true);
                   }
-      
+
                   canTap = true;
                 },
                 child: CustomPaint(
                   key: key,
                   painter: OthelloPainter(
-                      board: manager.board,
+                      manager: manager,
                       small: small,
                       useHighLight: useHighLight),
                 )),
@@ -152,22 +152,22 @@ class _OthelloPageState extends State<OthelloPage> {
                           if (!canTap || value == null || player == value) {
                             return;
                           }
-      
+
                           setState(() {
                             player = value;
                             manager.initialize();
-      
+
                             if (player == Player.white) {
                               manager.nextByAI();
                             }
                           });
-      
+
                           if (player == Player.white) {
                             await audioPlayer.play(AssetSource(putSound));
                           }
                         },
-                        items:
-                            Player.values.map<DropdownMenuItem<Player>>((value) {
+                        items: Player.values
+                            .map<DropdownMenuItem<Player>>((value) {
                           return DropdownMenuItem(
                               value: value,
                               child: Text(
@@ -176,7 +176,7 @@ class _OthelloPageState extends State<OthelloPage> {
                       ),
                     ),
                   ];
-      
+
                   if (small) {
                     return Column(children: widget);
                   } else {
@@ -207,28 +207,29 @@ class _OthelloPageState extends State<OthelloPage> {
                           if (!canTap || value == null || level == value) {
                             return;
                           }
-      
+
                           setState(() {
                             level = value;
                             manager.initialize();
-      
+
                             if (player == Player.white) {
                               manager.nextByAI();
                             }
                           });
-      
+
                           if (player == Player.white) {
                             await audioPlayer.play(AssetSource(putSound));
                           }
                         },
-                        items: Level.values.map<DropdownMenuItem<Level>>((value) {
+                        items:
+                            Level.values.map<DropdownMenuItem<Level>>((value) {
                           return DropdownMenuItem(
                               value: value, child: const Text('普通'));
                         }).toList(),
                       ),
                     ),
                   ];
-      
+
                   if (small) {
                     return Column(children: widget);
                   } else {
@@ -249,17 +250,18 @@ class _OthelloPageState extends State<OthelloPage> {
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.green[700],
                         shape: const ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8)))),
                     onPressed: () async {
                       if (canTap) {
                         setState(() {
                           manager.initialize();
-      
+
                           if (player == Player.white) {
                             manager.nextByAI();
                           }
                         });
-      
+
                         if (player == Player.white) {
                           await audioPlayer.play(AssetSource(putSound));
                         }
