@@ -45,6 +45,10 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
             aspectRatio: 1,
             child: GestureDetector(
                 onPanStart: (DragStartDetails details) async {
+                  if (_manager.isSorted) {
+                    return;
+                  }
+
                   var isSucceeded = false;
 
                   setState(() {
