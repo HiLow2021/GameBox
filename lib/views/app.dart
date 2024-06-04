@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const thresholdWide = 1200;
   static const thresholdMiddle = 800;
-  
+
   var selectedPageIndex = 0;
 
   Widget getPage() {
