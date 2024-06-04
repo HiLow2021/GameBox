@@ -58,7 +58,7 @@ class _OthelloPageState extends State<OthelloPage> {
           AspectRatio(
             aspectRatio: 1,
             child: GestureDetector(
-                onPanStart: (DragStartDetails details) async {
+                onTapDown: (TapDownDetails details) async {
                   if (!canTap) {
                     return;
                   }
@@ -244,8 +244,8 @@ class _OthelloPageState extends State<OthelloPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SizedBox(
-                width: small ? 150 : 200,
-                height: small ? 40 : 50,
+                width: small ? 128 : 192,
+                height: small ? 40 : 48,
                 child: FilledButton(
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.green[700],

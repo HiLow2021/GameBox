@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return SingleChildScrollView(
         child: Center(
             child:
-                Padding(padding: const EdgeInsets.all(40), child: getPage())));
+                Padding(padding: const EdgeInsets.all(20), child: getPage())));
   }
 
   @override

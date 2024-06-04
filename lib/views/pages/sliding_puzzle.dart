@@ -47,7 +47,7 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
           AspectRatio(
             aspectRatio: 1,
             child: GestureDetector(
-                onPanStart: (DragStartDetails details) async {
+                onTapDown: (TapDownDetails details) async {
                   if (manager.isSorted) {
                     return;
                   }
@@ -159,8 +159,8 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SizedBox(
-                width: small ? 150 : 200,
-                height: small ? 40 : 50,
+                width: small ? 128 : 192,
+                height: small ? 40 : 48,
                 child: FilledButton(
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.blue[700],
@@ -173,8 +173,8 @@ class _SlidingPuzzlePageState extends State<SlidingPuzzlePage> {
               ),
               const SizedBox(width: 20),
               SizedBox(
-                width: small ? 150 : 200,
-                height: small ? 40 : 50,
+                width: small ? 128 : 192,
+                height: small ? 40 : 48,
                 child: FilledButton(
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.blue[700],
